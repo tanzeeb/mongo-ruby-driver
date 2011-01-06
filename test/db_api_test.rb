@@ -472,10 +472,16 @@ class DBAPITest < Test::Unit::TestCase
   def test_hint
     name = @@coll.create_index('a')
     begin
+      assert_equal name, 'a_1'
+
       assert_nil @@coll.hint
+      assert_equal 1, @@coll.find({'a' => 1}, :hint => :a_1).to_a.size
       assert_equal 1, @@coll.find({'a' => 1}, :hint => 'a').to_a.size
       assert_equal 1, @@coll.find({'a' => 1}, :hint => ['a']).to_a.size
       assert_equal 1, @@coll.find({'a' => 1}, :hint => {'a' => 1}).to_a.size
+      @@coll.hint = :a_1
+      assert_equal('a_1', @@coll.hint)
+      assert_equal 1, @@coll.find('a' => 1).to_a.size
 
       @@coll.hint = 'a'
       assert_equal({'a' => 1}, @@coll.hint)

@@ -768,6 +768,8 @@ module Mongo
 
     def normalize_hint_fields(hint)
       case hint
+      when Symbol
+        hint.to_s
       when String
         {hint => 1}
       when Hash
